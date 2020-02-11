@@ -30,11 +30,12 @@
         width: 100%;
         font-size: 14px;
         font-family: inherit;
+        transition: all 0.2s ease-in-out;
 
         &:focus,
         &:active {
-          border-color: hsl(220, 44%, 27%);
-          outline: hsl(220, 44%, 27%);
+          border-color: #636f8b;
+          outline: #8692ad;
         }
       }
     }
@@ -51,6 +52,12 @@
       display: block;
       cursor: pointer;
       margin-bottom: 20px;
+      transition: all 0.2s ease-in-out;
+
+      &:hover,
+      &:active {
+        background-color: #e53e3a;
+      }
     }
   }
 }

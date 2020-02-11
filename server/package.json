@@ -1,0 +1,7 @@
+{
+  "name": "photo-booth-backend",
+  "version": "1.0.0",
+  "description": "Photo storing app using GraphQL, Apollo Client, Node.js and React.js'",
+  "main": "server.js",
+  "license": "MIT"
+}

@@ -1,0 +1,18 @@
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+
+  h3 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    word-spacing: 2px;
+  }
+
+  p {
+    font-size: 25px;
+  }
+}

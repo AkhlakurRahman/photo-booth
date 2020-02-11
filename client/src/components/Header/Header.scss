@@ -1,0 +1,28 @@
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  .logo {
+    font-size: 25px;
+    font-weight: 700;
+  }
+
+  .nav-items {
+    a {
+      padding: 10px 20px;
+      border-radius: 3px;
+      margin-right: 5px;
+      transition: all 0.2s ease-in-out;
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &:hover {
+        color: #ff4641;
+      }
+    }
+  }
+}

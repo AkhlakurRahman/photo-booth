@@ -1,0 +1,56 @@
+.upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+
+  h3 {
+    font-size: 35px;
+    margin-bottom: 40px;
+  }
+  .form-wrapper {
+    width: 500px;
+    max-width: 100%;
+
+    .form-control {
+      margin-bottom: 30px;
+      label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      input {
+        border: 1px solid #232d41;
+        background-color: #eaf4f4;
+        border-radius: 4px;
+        display: block;
+        padding: 10px;
+        width: 100%;
+        font-size: 14px;
+        font-family: inherit;
+
+        &:focus,
+        &:active {
+          border-color: hsl(220, 44%, 27%);
+          outline: hsl(220, 44%, 27%);
+        }
+      }
+    }
+    button {
+      background-color: #ff4641;
+      border: 2px solid transparent;
+      border-radius: 7px;
+      color: #fff;
+      width: inherit;
+      padding: 15px 20px;
+      font-size: 20px;
+      font-family: inherit;
+      width: 100%;
+      display: block;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+  }
+}

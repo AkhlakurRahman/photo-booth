@@ -1,0 +1,21 @@
+type Photo {
+  _id: ID
+  photo: String!
+  title: String!
+  date: String!
+  photo_location: String!
+  createdDate: String
+}
+
+type Mutation {
+  createPhotoPost(
+    photo: String!
+    title: String!
+    date: String!
+    photo_location: String!
+  ): Photo!
+}
+
+type Query {
+  getAllPhotoPost: [Photo]!
+}

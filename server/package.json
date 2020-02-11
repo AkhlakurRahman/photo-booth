@@ -2,6 +2,21 @@
   "name": "photo-booth-backend",
   "version": "1.0.0",
   "description": "Photo storing app using GraphQL, Apollo Client, Node.js and React.js'",
+  "scripts": {
+    "server": "nodemon server.js",
+    "client": "cd ../client && yarn start",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+  },
   "main": "server.js",
+  "dependencies": {
+    "apollo-server": "^2.10.0",
+    "dotenv": "^8.2.0",
+    "graphql": "^14.6.0",
+    "mongoose": "^5.8.11"
+  },
+  "devDependencies": {
+    "concurrently": "^5.1.0",
+    "nodemon": "^2.0.2"
+  },
   "license": "MIT"
 }

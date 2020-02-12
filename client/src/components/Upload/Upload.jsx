@@ -108,7 +108,9 @@ class Upload extends React.Component {
             />
           </div>
 
-          <button type='submit'>Store</button>
+          <button type='submit' disabled={!this.props.valid}>
+            Store
+          </button>
         </form>
       </div>
     );

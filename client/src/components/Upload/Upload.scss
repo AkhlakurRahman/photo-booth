@@ -65,5 +65,12 @@
         background-color: #e53e3a;
       }
     }
+    button:disabled,
+    button[disabled] {
+      border: 2px solid #4d3d3d;
+      background-color: #bd7473;
+      color: #dddddd;
+      cursor: not-allowed;
+    }
   }
 }

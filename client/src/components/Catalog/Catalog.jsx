@@ -25,8 +25,9 @@ const Catalog = () => {
           if (error) return <p>Error :(</p>;
 
           return data.getAllPhotoPost.map(
-            ({ _id, title, date, photo_location }) => (
+            ({ _id, photo, title, date, photo_location }) => (
               <div key={_id}>
+                <img src={photo} alt={title} />
                 <p>{title}</p>
                 <p>{date}</p>
                 <p>{photo_location}</p>
@@ -40,3 +41,4 @@ const Catalog = () => {
 };
 
 export default Catalog;
+export { GET_PHOTO_POSTS };

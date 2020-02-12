@@ -2,10 +2,12 @@ import React from 'react';
 import { Field, reduxForm, reset } from 'redux-form';
 import { Mutation } from '@apollo/react-components';
 import gql from 'graphql-tag';
+import axios from 'axios';
 
 import { validate, listOfLocation } from '../../utils/helpers';
 
 import './Upload.scss';
+import { GET_PHOTO_POSTS } from '../Catalog/Catalog';
 
 const CREATE_PHOTO_POST_MUTATION = gql`
   mutation CREATE_PHOTO_POST_MUTATION(
@@ -36,11 +38,21 @@ class Upload extends React.Component {
     photo_location: ''
   };
 
-  handleFileChange = (event, input) => {
+  handleFileChange = async (event, input) => {
     event.preventDefault();
     const imageFile = event.target.files[0];
     input.onChange(imageFile);
-    this.setState({ photo: imageFile.name });
+    const data = new FormData();
+    data.append('file', imageFile);
+    data.append('upload_preset', 'photobooth');
+    const res = await axios({
+      url: 'https://api.cloudinary.com/v1_1/dtxgfwoej/image/upload',
+      method: 'post',
+      data
+    });
+    console.log(res);
+
+    this.setState({ photo: res.data.eager[0].secure_url });
   };
 
   renderErrorMessage = ({ error, touched }) => {
@@ -104,7 +116,11 @@ class Upload extends React.Component {
 
   render() {
     return (
-      <Mutation mutation={CREATE_PHOTO_POST_MUTATION} variables={this.state}>
+      <Mutation
+        mutation={CREATE_PHOTO_POST_MUTATION}
+        variables={this.state}
+        refetchQueries={[{ query: GET_PHOTO_POSTS }]}
+      >
         {(createPhotoPost, { loading, error }) => (
           <div className='container upload'>
             <h3>Store one of your memories</h3>
@@ -114,6 +130,7 @@ class Upload extends React.Component {
               onSubmit={this.props.handleSubmit(async (_, dispatch) => {
                 await createPhotoPost();
                 dispatch(reset('photoUpload'));
+                this.props.history.push('/catalog');
               })}
             >
               <div className='form-control'>

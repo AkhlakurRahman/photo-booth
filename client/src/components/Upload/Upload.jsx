@@ -1,15 +1,46 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, reset } from 'redux-form';
+import { Mutation } from '@apollo/react-components';
+import gql from 'graphql-tag';
 
 import { validate, listOfLocation } from '../../utils/helpers';
 
 import './Upload.scss';
 
+const CREATE_PHOTO_POST_MUTATION = gql`
+  mutation CREATE_PHOTO_POST_MUTATION(
+    $photo: String!
+    $title: String!
+    $date: String!
+    $photo_location: String!
+  ) {
+    createPhotoPost(
+      photo: $photo
+      title: $title
+      date: $date
+      photo_location: $photo_location
+    ) {
+      photo
+      title
+      date
+      photo_location
+    }
+  }
+`;
+
 class Upload extends React.Component {
-  handleChange = (event, input) => {
+  state = {
+    photo: '',
+    title: '',
+    date: '',
+    photo_location: ''
+  };
+
+  handleFileChange = (event, input) => {
     event.preventDefault();
     const imageFile = event.target.files[0];
     input.onChange(imageFile);
+    this.setState({ photo: imageFile.name });
   };
 
   renderErrorMessage = ({ error, touched }) => {
@@ -25,18 +56,31 @@ class Upload extends React.Component {
           name={input.name}
           type={type}
           id={id}
-          onChange={event => this.handleChange(event, input)}
+          onChange={event => this.handleFileChange(event, input)}
         />
         {this.renderErrorMessage(meta)}
       </>
     );
   };
 
+  handleChange = (event, input) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    input.onChange(value);
+    this.setState({ [name]: value });
+  };
+
   renderInput = ({ input, type, id, inputLabel, placeholder, meta }) => {
     return (
       <div className='form-control'>
         <label htmlFor={id}>{inputLabel}</label>
-        <input type={type} {...input} id={id} placeholder={placeholder} />
+        <input
+          type={type}
+          {...input}
+          id={id}
+          placeholder={placeholder}
+          onChange={event => this.handleChange(event, input)}
+        />
         {this.renderErrorMessage(meta)}
       </div>
     );
@@ -45,7 +89,7 @@ class Upload extends React.Component {
   renderLocationSelect = ({ input, meta }) => {
     return (
       <>
-        <select {...input}>
+        <select {...input} onChange={event => this.handleChange(event, input)}>
           <option value=''>Select a location...</option>
           {listOfLocation.map(val => (
             <option value={val} key={val}>
@@ -58,61 +102,64 @@ class Upload extends React.Component {
     );
   };
 
-  onSubmit = formValues => {
-    console.log(formValues);
-  };
-
   render() {
     return (
-      <div className='container upload'>
-        <h3>Store one of your memories</h3>
-        <form
-          action=''
-          className='form-wrapper'
-          onSubmit={this.props.handleSubmit(this.onSubmit)}
-        >
-          <div className='form-control'>
-            <label htmlFor='photo'>Upload your photo</label>
-            <Field
-              type='file'
-              name='photo'
-              id='photo'
-              component={this.renderFileInput}
-            />
+      <Mutation mutation={CREATE_PHOTO_POST_MUTATION} variables={this.state}>
+        {(createPhotoPost, { loading, error }) => (
+          <div className='container upload'>
+            <h3>Store one of your memories</h3>
+            <form
+              action=''
+              className='form-wrapper'
+              onSubmit={this.props.handleSubmit(async (_, dispatch) => {
+                await createPhotoPost();
+                dispatch(reset('photoUpload'));
+              })}
+            >
+              <div className='form-control'>
+                <label htmlFor='photo'>Upload your photo</label>
+                <Field
+                  type='file'
+                  name='photo'
+                  id='photo'
+                  component={this.renderFileInput}
+                />
+              </div>
+
+              <Field
+                type='text'
+                name='title'
+                id='title'
+                inputLabel='Photo title'
+                placeholder='Enter a photo title'
+                component={this.renderInput}
+              />
+
+              <Field
+                type='date'
+                name='date'
+                id='date'
+                inputLabel='When the photo was taken?'
+                component={this.renderInput}
+              />
+
+              <div className='form-control'>
+                <label htmlFor='photo_location'>
+                  Where did you take the photo?
+                </label>
+                <Field
+                  name='photo_location'
+                  component={this.renderLocationSelect}
+                />
+              </div>
+
+              <button type='submit' disabled={!this.props.valid}>
+                Store
+              </button>
+            </form>
           </div>
-
-          <Field
-            type='text'
-            name='title'
-            id='title'
-            inputLabel='Photo title'
-            placeholder='Enter a photo title'
-            component={this.renderInput}
-          />
-
-          <Field
-            type='date'
-            name='date'
-            id='date'
-            inputLabel='When the photo was taken?'
-            component={this.renderInput}
-          />
-
-          <div className='form-control'>
-            <label htmlFor='photo_location'>
-              Where did you take the photo?
-            </label>
-            <Field
-              name='photo_location'
-              component={this.renderLocationSelect}
-            />
-          </div>
-
-          <button type='submit' disabled={!this.props.valid}>
-            Store
-          </button>
-        </form>
-      </div>
+        )}
+      </Mutation>
     );
   }
 }

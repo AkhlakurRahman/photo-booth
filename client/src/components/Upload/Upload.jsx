@@ -1,59 +1,111 @@
 import React from 'react';
-import { Form, reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
+
+import { validate, listOfLocation } from '../../utils/helpers';
 
 import './Upload.scss';
 
 class Upload extends React.Component {
+  handleChange = (event, input) => {
+    event.preventDefault();
+    const imageFile = event.target.files[0];
+    input.onChange(imageFile);
+  };
+
+  renderErrorMessage = ({ error, touched }) => {
+    if (error && touched) {
+      return <div className='error-message'>{error}</div>;
+    }
+  };
+
+  renderFileInput = ({ input, type, id, meta }) => {
+    return (
+      <>
+        <input
+          name={input.name}
+          type={type}
+          id={id}
+          onChange={event => this.handleChange(event, input)}
+        />
+        {this.renderErrorMessage(meta)}
+      </>
+    );
+  };
+
+  renderInput = ({ input, type, id, inputLabel, placeholder, meta }) => {
+    return (
+      <div className='form-control'>
+        <label htmlFor={id}>{inputLabel}</label>
+        <input type={type} {...input} id={id} placeholder={placeholder} />
+        {this.renderErrorMessage(meta)}
+      </div>
+    );
+  };
+
+  renderLocationSelect = ({ input, meta }) => {
+    return (
+      <>
+        <select {...input}>
+          <option value=''>Select a location...</option>
+          {listOfLocation.map(val => (
+            <option value={val} key={val}>
+              {val}
+            </option>
+          ))}
+        </select>
+        {this.renderErrorMessage(meta)}
+      </>
+    );
+  };
+
+  onSubmit = formValues => {
+    console.log(formValues);
+  };
+
   render() {
     return (
       <div className='container upload'>
         <h3>Store one of your memories</h3>
-        <form action='' className='form-wrapper'>
+        <form
+          action=''
+          className='form-wrapper'
+          onSubmit={this.props.handleSubmit(this.onSubmit)}
+        >
           <div className='form-control'>
             <label htmlFor='photo'>Upload your photo</label>
-            <input
+            <Field
               type='file'
               name='photo'
               id='photo'
-              className='custom-file-input'
+              component={this.renderFileInput}
             />
           </div>
 
-          <div className='form-control'>
-            <label htmlFor='title'>Photo title</label>
-            <input
-              type='text'
-              name='title'
-              id='title'
-              placeholder='Enter a photo title'
-            />
-          </div>
+          <Field
+            type='text'
+            name='title'
+            id='title'
+            inputLabel='Photo title'
+            placeholder='Enter a photo title'
+            component={this.renderInput}
+          />
 
-          <div className='form-control'>
-            <label htmlFor='date'>When the photo was taken?</label>
-            <input type='date' name='date' id='date' />
-          </div>
+          <Field
+            type='date'
+            name='date'
+            id='date'
+            inputLabel='When the photo was taken?'
+            component={this.renderInput}
+          />
 
           <div className='form-control'>
             <label htmlFor='photo_location'>
               Where did you take the photo?
             </label>
-            <input
-              list='list_of_location'
+            <Field
               name='photo_location'
-              id='photo_location'
-              placeholder='Select where the photo was taken'
+              component={this.renderLocationSelect}
             />
-            <datalist id='list_of_location'>
-              <option value='Barisal' />
-              <option value='Chottogram' />
-              <option value='Dhaka' />
-              <option value='Khulna' />
-              <option value='Mymensingh' />
-              <option value='Rajshahi' />
-              <option value='Rangpur' />
-              <option value='Sylhet' />
-            </datalist>
           </div>
 
           <button type='submit'>Store</button>
@@ -64,5 +116,6 @@ class Upload extends React.Component {
 }
 
 export default reduxForm({
-  form: 'uploadPhoto'
+  form: 'photoUpload',
+  validate
 })(Upload);

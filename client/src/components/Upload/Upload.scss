@@ -13,6 +13,10 @@
     width: 500px;
     max-width: 100%;
 
+    .error-message {
+      color: #ff4641;
+    }
+
     .form-control {
       margin-bottom: 30px;
       label {
@@ -21,9 +25,10 @@
         font-weight: 700;
       }
 
-      input {
-        border: 1px solid #232d41;
-        background-color: #eaf4f4;
+      input,
+      select {
+        border: 1px solid #636f8b;
+        background-color: #cfecec;
         border-radius: 4px;
         display: block;
         padding: 10px;
@@ -34,8 +39,9 @@
 
         &:focus,
         &:active {
-          border-color: #636f8b;
+          border-color: #232d41;
           outline: #8692ad;
+          background-color: #eaf4f4;
         }
       }
     }

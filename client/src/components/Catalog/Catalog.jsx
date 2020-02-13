@@ -43,14 +43,19 @@ const Catalog = () => {
                     <Mutation
                       mutation={DELETE_PHOTO_POST_MUTATION}
                       variables={{ photoId: _id }}
-                      refetchQueries={GET_PHOTO_POSTS}
+                      refetchQueries={[{ query: GET_PHOTO_POSTS }]}
                     >
                       {(deletePhotoPost, { loading, error }) => (
                         <form
                           className='delete-form'
                           onSubmit={async e => {
                             e.preventDefault();
-                            await deletePhotoPost();
+                            const confirmDeletePost = window.confirm(
+                              'Are you sure?'
+                            );
+                            if (confirmDeletePost) {
+                              await deletePhotoPost();
+                            }
                           }}
                         >
                           <button type='submit'>

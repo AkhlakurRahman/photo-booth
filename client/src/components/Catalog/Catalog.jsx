@@ -45,24 +45,28 @@ const Catalog = () => {
                       variables={{ photoId: _id }}
                       refetchQueries={[{ query: GET_PHOTO_POSTS }]}
                     >
-                      {(deletePhotoPost, { loading, error }) => (
-                        <form
-                          className='delete-form'
-                          onSubmit={async e => {
-                            e.preventDefault();
-                            const confirmDeletePost = window.confirm(
-                              'Are you sure?'
-                            );
-                            if (confirmDeletePost) {
-                              await deletePhotoPost();
-                            }
-                          }}
-                        >
-                          <button type='submit'>
-                            <i className='far fa-trash-alt'></i>
-                          </button>
-                        </form>
-                      )}
+                      {(deletePhotoPost, { loading, error }) => {
+                        if (loading) return <p>Loading...</p>;
+                        if (error) return <p>Error :(</p>;
+                        return (
+                          <form
+                            className='delete-form'
+                            onSubmit={async e => {
+                              e.preventDefault();
+                              const confirmDeletePost = window.confirm(
+                                'Are you sure?'
+                              );
+                              if (confirmDeletePost) {
+                                await deletePhotoPost();
+                              }
+                            }}
+                          >
+                            <button type='submit'>
+                              <i className='far fa-trash-alt'></i>
+                            </button>
+                          </form>
+                        );
+                      }}
                     </Mutation>
                   </figure>
                 </div>

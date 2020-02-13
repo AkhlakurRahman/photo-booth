@@ -50,7 +50,6 @@ class Upload extends React.Component {
       method: 'post',
       data
     });
-    console.log(res);
 
     this.setState({ photo: res.data.eager[0].secure_url });
   };

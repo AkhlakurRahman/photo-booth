@@ -1,8 +1,7 @@
 module.exports = {
   Query: {
     getAllPhotoPost: async (_, args, { Photo }) => {
-      const photoPosts = await Photo.find({}).sort({ createdDate: 'desc' });
-      return photoPosts;
+      return await Photo.find({}).sort({ createdDate: 'desc' });
     }
   },
 
@@ -18,6 +17,10 @@ module.exports = {
       }).save();
 
       return newPhotoPost;
+    },
+
+    deletePhotoPost: async (_, { photoId }, { Photo }) => {
+      return await Photo.findOneAndRemove({ _id: photoId });
     }
   }
 };

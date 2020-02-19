@@ -10,7 +10,7 @@ import App from './App';
 import reducers from './reducers';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4444/graphql'
+  uri: 'https://photo-booths.herokuapp.com/graphql'
 });
 
 const store = createStore(reducers);
